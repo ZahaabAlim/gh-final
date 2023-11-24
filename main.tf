@@ -14,12 +14,12 @@ provider "aws" {
 }
 #creating s3 bucket
 resource "aws_s3_bucket" "factorial_bucket" {
-  bucket = "zahaab-pyt"
+  bucket = "zahaab-pyt-bucket"
   acl= "private"
 }
 #adding object to s3 bucket
 resource "aws_s3_bucket_object" "object" {
-  bucket = aws_s3_bucket.factorial_bucket.id
+  bucket = aws_s3_bucket.factorial_bucket.bucket
   key    = "factorial.py"
-  source = "C:\\Users\\2130401\\OneDrive - Cognizant\\Desktop\\factorial.py"
+  source = "C:\\Users\\2130401\\final-task\\factorial.py"
 }
