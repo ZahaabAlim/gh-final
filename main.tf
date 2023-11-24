@@ -14,7 +14,7 @@ provider "aws" {
 }
 #creating s3 bucket
 resource "aws_s3_bucket" "factorial_bucket" {
-  bucket = "zahaab-python"
+  bucket = "zahaab-pyt"
   acl= "private"
 }
 #adding object to s3 bucket
