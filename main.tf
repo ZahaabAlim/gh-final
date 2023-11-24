@@ -20,6 +20,6 @@ resource "aws_s3_bucket" "factorial_bucket" {
 #adding object to s3 bucket
 resource "aws_s3_bucket_object" "object" {
   bucket = aws_s3_bucket.factorial_bucket.id
-  key    = "factorial.py"
-  source = "C:\\Users\\2130401\\final-task\\factorial.py"
+  key    = "fact.txt"
+  source = "C:\\Users\\2130401\\final-task\\fact.txt"
 }
