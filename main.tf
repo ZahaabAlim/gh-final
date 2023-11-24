@@ -21,5 +21,5 @@ resource "aws_s3_bucket" "factorial_bucket" {
 resource "aws_s3_bucket_object" "object" {
   bucket = aws_s3_bucket.factorial_bucket.id
   key    = "factorial.py"
-  source = "C:\\Users\\2130401\\final-task\\factorial.py"
+  source = "C:\\Users\\2130401\\OneDrive - Cognizant\\Desktop\\factorial.py"
 }
