@@ -1,26 +1,41 @@
 name: Deploy to S3
 on:
- push:
-   branches:
-     - main
+  push:
+    branches:
+      - main
+
 jobs:
- deploy:
-   runs-on: ubuntu-latest
-   steps:
-   - name: Checkout Repository
-     uses: actions/checkout@v3
-   - name: Setup Python
-     uses: actions/setup-python@v3
-     with:
-       python-version: 3.9
-   - name: Run Python Script
-     run: python factorial.py
-   - name: Setup Terraform
-     uses: hashicorp/setup-terraform@v1
-   - name: Terraform Init
-     run: terraform init
-   - name: Terraform Apply
-     run: terraform apply -auto-approve
-     env:
-       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+      - name: Run Python Script
+        run: python factorial.py
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: terraform-plan
+          path: tfplan
+      - name: Manual Approval
+        uses: trstringer/manual-approval@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          approvers: user1
+          minimum-approvals: 1
+          issue-title: "Deploying v1.3.5 to prod from staging"
+          issue-body: "Please approve or deny the deployment of version v1.3.5."
+          exclude-workflow-initiator-as-approver: false
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
